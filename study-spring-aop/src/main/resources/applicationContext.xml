@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+">
+    <bean id="userService" class="com.big.service.impl.UserServiceImpl"/>
+
+    <bean id="myAdvice" class="com.big.advice.MyAdvice"/>
+    <bean id="customAdvice" class="com.big.advice.CustomAdvice"/>
+
+    <!--    <bean id="myBeanPostProcessor" class="com.big.processors.MyBeanPostProcessor"/>-->
+    <!--  Aop配置  -->
+    <aop:config proxy-target-class="false">
+        <!--    切入点    -->
+        <!--   切点表达式 === [访问修饰符] 返回值类型 包名.类名.方法名(参数)
+          public void com.big.service.impl.UserServiceImpl.getUser() 访问修饰符可以省略
+          void com.big.service.impl.UserServiceImpl.getUser() void 返回值类型
+          void com.big.service.impl.UserServiceImpl.getUser() com.big.service.impl 包名
+          void com.big.service..UserServiceImpl.getUser()    com.big.service.. 查看com.big.service所有的子包
+          void com.big.service..UserServiceImpl.getUser()    UserServiceImpl 类名
+          void com.big.service..UserServiceImpl.getUser()    getUser 方法名
+          void com.big.service..UserServiceImpl.getUser(..)  任意参数
+          某一级包名、类型、方法名都可以用 * 表示
+          参数 (..) 表示任意参数
+
+             -->
+        <aop:pointcut id="myBeforePointCut"
+                      expression="execution(void com.big.service.impl.UserServiceImpl.getUser())"/>
+        <aop:pointcut id="myAfterPointCut" expression="execution(void com.big.service.impl.UserServiceImpl.delUser())"/>
+        <!--    通知类    -->
+        <aop:aspect ref="myAdvice">
+            <!--   aop:before 通知类型   method="before" 指定方法
+              pointcut-ref="myBeforePointCut"  在哪个切入点生效      -->
+            <aop:before method="before" pointcut-ref="myBeforePointCut"/>
+            <aop:after method="after" pointcut-ref="myAfterPointCut"/>
+
+            <!--
+                     aop:before  前置通知
+                     aop:after-returning 后置通知目标方法执行之后通知，目标方法异常 不在执行
+                     aop:around  环绕通知 目标方法执行前后通知，目标方法异常，不在执行
+                     aop:after-throwing 异常通知 目标方法目标方法异常之后通知
+                     aop:after   最终通知 不管目标方法是否异常，最终都会执行
+            -->
+        </aop:aspect>
+        <!--   实现接口配置的通知类  但是不灵活    -->
+<!--        <aop:advisor advice-ref="customAdvice" pointcut="execution(* com.big.service..UserServiceImpl.*(..))"/>-->
+    </aop:config>
+</beans>

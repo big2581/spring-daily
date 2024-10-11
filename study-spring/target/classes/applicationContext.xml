@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--   <bean id="ss">  容器里唯一的id  -->
+    <!--   class="com.big.study_spring.service.impl.UserServiceImpl"  全类型限定名 -->
+    <!--  name="userService2" 类名称 BeanFactory中getBean("name") 别名 可以有多个别名 -->
+    <!--  scope="singleton" 单列  -->
+    <!--  lazy-init="true" 延迟加载  -->
+    <!--  init-method="init" 初始化方法  -->
+    <!--  destroy-method="destroy"  -->
+    <!--  factory-method="getUserServiceImpl" 返回指定bean对象  -->
+
+    <!--  <constructor-arg name="name" value="w"/> bean标签中 constructor-arg 代表构造参数  -->
+    <bean id="ss"
+          class="com.big.study_spring.service.impl.UserServiceImpl"
+          name="userService2,abbb"
+          lazy-init="false"
+          init-method="init"
+          destroy-method="destroy"
+    >
+        <constructor-arg name="name" value="w"/>
+    </bean>
+
+    <!--静态工厂创建实例化bean  静态方法可以直接调用返回类-->
+    <bean id="factorystaticbean" class="com.big.study_spring.factorybean.StaticBean"
+          factory-method="getUserServiceImpl">
+        <!--   作为静态工厂的参数也可以用 constructor-arg    -->
+        <constructor-arg name="name" value="hehehe"/>
+        <constructor-arg name="age" value="12"/>
+    </bean>
+
+    <!--  实例化工厂  -->
+    <bean id="instanceBeanfactory" class="com.big.study_spring.factorybean.InstanceBean"></bean>
+    <!-- 通过实例化工厂调用方法 初始化bean -->
+    <bean id="instanceBean" factory-method="getUserServiceImpl" factory-bean="instanceBeanfactory"></bean>
+
+    <bean id="myFactoryBean" class="com.big.study_spring.factorybean.MyFactoryBean"></bean>
+
+    <!--  属性赋值  -->
+    <bean id="student" class="com.big.study_spring.bean.Student">
+        <property name="name" value="张三"/>
+        <property name="age" value="12"/>
+        <property name="userService" ref="myFactoryBean"/>
+        <property name="list">
+            <list>
+                <value>11</value>
+                <value>22</value>
+                <value>33</value>
+            </list>
+        </property>
+        <property name="maps">
+            <map>
+                <entry key="key1" value="value1"/>
+                <entry key="key2" value="value2"/>
+                <entry key="key3" value="value3"/>
+            </map>
+        </property>
+    </bean>
+</beans>
