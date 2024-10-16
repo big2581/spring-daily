@@ -14,6 +14,10 @@ import javax.servlet.http.HttpServletResponse;
  * Filter     javaWeb原生技术      可以对所有资源都过滤包括任何的servlet、jsp、其他资源 都可以   早于任何Servlet
  * Interceptor springmvc技术框架   只有进入springmvc范围内才进行拦截  主要是拦截Controller 中每个方法   晚于DispatchServlet执行
  *
+ *                                 preHandle    postHandle     afterCompletion
+ * 多个Interceptor 执行顺序  正常是   A   B   C    C    B   A     C   B   A
+ *      preHandle当C返回false       A   B   C    B    A        B   A
+ *      preHandle当B返回false       A   B        A             A
  * @author Yin
  * @date 2024-10-15 17:34
  */

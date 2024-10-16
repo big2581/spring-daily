@@ -1,6 +1,8 @@
 package com.big.service.impl;
 
+import com.big.controller.ModeController;
 import com.big.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,6 +13,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserServiceImpl implements UserService {
+
+    @Autowired
+    private ModeController modeController;
     @Override
     public String getOneUser() {
         return "张三";

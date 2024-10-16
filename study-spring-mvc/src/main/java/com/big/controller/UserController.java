@@ -192,10 +192,10 @@ public class UserController {
         return "/index.jsp";
     }
 
-    @RequestMapping("show12")
-    public String show12(HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
+    @RequestMapping("show13")
+    public String show13(HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
         String oneUser = userService.getOneUser();
-        System.out.println(oneUser + " show12 正在执行......." + servletRequest + " -" + servletResponse);
+        System.out.println(oneUser + " show13 正在执行......." + servletRequest + " -" + servletResponse);
         return "/index.jsp";
     }
 

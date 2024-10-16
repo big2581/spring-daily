@@ -37,13 +37,13 @@
     <!--  第三种  帮我们创建静态资源处理器 org.springframework.web.servlet.resource.DefaultServletHttpRequestHandler 去处理静态资源 -->
 
     <!--  所以当我们在配置静态资源访问时 要是未 id="handlerMapping" 对象时  请求进来是不会去匹配到对应的路径的  -->
-
+    <mvc:default-servlet-handler/>
     <!--   配置注解驱动时
     会帮你自动添加 id="handlerMapping" 这个类
     也能帮你自己创建 id="requestMappingHandlerAdapter 配置合适的消息转换器" 多个转换器
     也能帮我创建 DefaultServletHttpRequestHandler 资源访问处理器
     -->
-    <mvc:default-servlet-handler/>
+    <mvc:annotation-driven/>
     <!--  配置springmvc拦截器  -->
     <mvc:interceptors>
         <mvc:interceptor>
