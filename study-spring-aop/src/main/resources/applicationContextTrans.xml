@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+">
+    <!--  相当于添加了一个BeanFactoryPostProcessor 注册beanDefinition  -->
+    <context:component-scan base-package="com.big"/>
+
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+
+
+    <bean id="accountService" class="com.big.service.impl.AccountServiceImpl">
+        <property name="accountMapper" ref="accountMapper"/>
+    </bean>
+
+    <bean id="datasource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="driverClassName" value="${jdbc.driver}"/>
+    </bean>
+
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="datasource"/>
+    </bean>
+
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.big.mapper"/>
+    </bean>
+
+    <!--  事务管理器(每个ORM的框架实现不一样的管理器)  -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="datasource"/>
+    </bean>
+
+    <!--  配置spring事务的增强器advice  -->
+    <!--    <tx:advice id="myAdvice" transaction-manager="transactionManager">-->
+    <!--        <tx:attributes>-->
+    <!--            &lt;!&ndash;-->
+    <!--                  name: 方法名  * 是通配符 add*-->
+    <!--                  isolation: 事务的隔离级别 解决事务并发存在的三大问题。脏读、不可重复读、幻读/虚读-->
+    <!--                  常用的有READ_COMMITTED、REPEATABLE_READ-->
+    <!--                      DEFAULT 默认隔离级别，取决于当前数据库隔离级别，例如mysql的默认是REPEATABLE_READ-->
+    <!--                      READ_COMMITTED  A事务只能读取到其他事务已提交的记录，不能读取到未提交的记录。可以解决脏问题，但是不能解决不可重复读和幻读-->
+    <!--                      READ_UNCOMMITTED A事务可以读取代B事务尚未提交的事务记录，不能解决任何并发问题，安全性能最低，性能最高-->
+    <!--                      REPEATABLE_READ A事务多次从数据库读取某条记录结果一直，可以解决不可重复读，不可以解决幻读-->
+    <!--                      SERIALIZABLE 串行化，可以解决任何并发问题，安全性高，但性能最低-->
+    <!--                  timeout: 超时时间 默认-1 单位秒-->
+    <!--                  read-only：只读操作 查询操作设置为只读-->
+    <!--                  propagation: 事务的传播行为，解决业务方法调用业务方法（嵌套事务问题）-->
+
+
+    <!--                   &ndash;&gt;-->
+    <!--            <tx:method name="*" isolation="REPEATABLE_READ" timeout="3" read-only="false" propagation="REQUIRED"/>-->
+    <!--        </tx:attributes>-->
+    <!--    </tx:advice>-->
+
+    <!--    <aop:config>-->
+    <!--        <aop:pointcut id="txPointCut" expression="execution(* com.big.service..*.*(..))"/>-->
+    <!--        <aop:advisor advice-ref="myAdvice" pointcut-ref="txPointCut"/>-->
+    <!--    </aop:config>-->
+    <!--  配置事务注解驱动 自动完整事务注解  -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <!--aop-->
+    <aop:aspectj-autoproxy/>
+
+</beans>

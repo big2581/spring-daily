@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+">
+    <context:component-scan base-package="com.big.controller"/>
+    <!--    &lt;!&ndash;  这个是解析@RequestMapping 注解的  &ndash;&gt;-->
+    <!--    <bean id="handlerMapping"-->
+    <!--          class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>-->
+    <!--    &lt;!&ndash;  由源码得知 当容器中有MappingHandlerAdapter、MappingHandler 默认是不会帮你创建这些对象   &ndash;&gt;-->
+    <!--    <bean id="requestMappingHandlerAdapter"-->
+    <!--          class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">-->
+    <!--        <property name="messageConverters">-->
+    <!--            <list>-->
+    <!--                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>-->
+    <!--            </list>-->
+    <!--        </property>-->
+    <!--    </bean>-->
+    <!--  Bean的名称必须叫multipartResolver  -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="utf-8"/>
+    </bean>
+
+    <!--  配置静态资源映射路径  -->
+    <!--  第二种  名称空间帮我向容器注入了 SimpleUrlHandlerMapping   -->
+    <!--    <mvc:resources mapping="/image/**" location="/img/"/>-->
+    <!--    <mvc:resources mapping="/css/**" location="/css/"/>-->
+    <!--    <mvc:resources mapping="/html/**" location="/html/"/>-->
+    <!--    <mvc:resources mapping="/js/**" location="/js/"/>-->
+
+    <!--  第三种方式也 会向容器注入了 SimpleUrlHandlerMapping   -->
+    <!--  第三种  帮我们创建静态资源处理器 org.springframework.web.servlet.resource.DefaultServletHttpRequestHandler 去处理静态资源 -->
+
+    <!--  所以当我们在配置静态资源访问时 要是未 id="handlerMapping" 对象时  请求进来是不会去匹配到对应的路径的  -->
+
+    <!--   配置注解驱动时
+    会帮你自动添加 id="handlerMapping" 这个类
+    也能帮你自己创建 id="requestMappingHandlerAdapter 配置合适的消息转换器" 多个转换器
+    也能帮我创建 DefaultServletHttpRequestHandler 资源访问处理器
+    -->
+    <mvc:default-servlet-handler/>
+    <!--  配置springmvc拦截器  -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/inter"/>
+            <bean class="com.big.interceptors.MyHandlerInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+</beans>
