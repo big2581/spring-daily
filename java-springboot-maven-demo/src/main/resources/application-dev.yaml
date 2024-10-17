@@ -1,0 +1,31 @@
+server:
+  port: 8083
+
+spring:
+  application:
+  name: java-springboot-maven-demo-yaml
+
+#map集合
+person:
+  age: 18
+  name: xiaoq
+
+#行内写法
+person2: {name: zhangsan,age: 19}
+
+
+#数组
+address:
+  - beijing
+  - shenzhen
+  - shanghai
+#行内写法
+address2: [beijing,shanghai,shenzhen]
+
+#常量
+msg1: 'abc \n cd' # 不会解析 \n
+msg2: "abc \n cd" # 会解析 \n
+
+#参数引用
+args: ${person.age}
+
