@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
  */
 @ConfigurationProperties("person")
 @Component
-@EnableConfigurationProperties
 public class PersonDTO {
     private String name;
     private Integer age;

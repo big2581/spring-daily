@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @RequestMapping("mode")
 @ResponseBody
-//@RestController
+@Controller
 public class ModeController {
 
     @GetMapping("forward")
